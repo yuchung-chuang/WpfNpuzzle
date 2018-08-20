@@ -78,24 +78,45 @@ namespace Wpf15puzzle
       InitializeBoard();
       InitializePuzzles();
       InitializeTimer();
-      InitializeBestRecord();
+      //InitializeXmlRecord();
+      InitializeSettingRecord();
       StartUpAnimation();
     }
 
+    int? _record;
+    int? record
+    {
+      get => _record;
+      set
+      {
+        if (value != _record)
+        {
+          if (value == 0)
+          {
+            _record = null;
+          }
+          else
+          {
+            _record = value;
+          }
+        }
+      }
+    }
+    private void InitializeSettingRecord()
+    {
+      record = Properties.Settings.Default.record;
+      var (min, sec, ms, tic) = TimeConverter.ToString(record);
+      tbBest.Text = $"{min}:{sec}:{tic}";
+    }
+
     double lineWidth;
-    double lineHeight;
     double puzzleWidth;
-    double puzzleHeight;
     private void InitializeCanvas()
     {
-      var p = 5;
-      var l = (5 * p / (p - 4));
-      Debug.Assert(canvasBoard.ActualWidth == canvasBoard.ActualWidth, "!!");
-      var length = canvasBoard.ActualWidth;
-      lineWidth = length / l;
-      lineHeight = length / l;
-      puzzleWidth = length / p;
-      puzzleHeight = length / p;
+      var p = n+1; // p > n
+      var l = ((n+1) * p / (p - n));
+      lineWidth = canvasBoard.ActualWidth / l;
+      puzzleWidth = canvasBoard.ActualWidth / p;
     }
 
     Random random = new Random();
@@ -107,6 +128,9 @@ namespace Wpf15puzzle
       var numbers = Enumerable.Range(1, L).ToArray();
       do
       {
+#if DEBUG
+        break;
+#endif
         numbers = numbers.OrderBy(x => random.Next()).ToArray();
       } while (!IsValid(numbers));
       for (int i = 0, k = 0; i < n && k < L; i++)
@@ -150,7 +174,7 @@ namespace Wpf15puzzle
           {
             Content = board[row, col].ToString(),
             Width = puzzleWidth,
-            Height = puzzleHeight,
+            Height = puzzleWidth,
           };
           canvasBoard.Children.Add(puzzle);
           puzzles.Add(puzzle);
@@ -188,9 +212,9 @@ namespace Wpf15puzzle
 
     XmlRecord xmlRecord;
     string recordPath = "record.xml";
-    private void InitializeBestRecord()
+    private void InitializeXmlRecord()
     {
-      Xml2Record();
+      ReadXml();
       var time = xmlRecord.Records[0];
       var (min, sec, ms, tic) = TimeConverter.ToString(time);
       tbBest.Text = $"{min}:{sec}:{tic}";
@@ -198,7 +222,7 @@ namespace Wpf15puzzle
     private void InitializeXml()
     {
       xmlRecord = new XmlRecord();
-      Record2Xml();
+      SaveXml();
     }
     private void CheckXml()
     {
@@ -207,12 +231,12 @@ namespace Wpf15puzzle
         InitializeXml();
       }
     }
-    private void Record2Xml()
+    private void SaveXml()
     {
       var xmlString = XmlGenericSerializer.Serialize(xmlRecord);
       File.WriteAllText(recordPath, xmlString);
     }
-    private void Xml2Record()
+    private void ReadXml()
     {
       CheckXml();
       var xmlString = File.ReadAllText(recordPath);
@@ -259,7 +283,7 @@ namespace Wpf15puzzle
       MoveBoard(from, to);
       if (IsComplete)
       {
-        CompleteGameAsync();
+        CompleteGame();
       }
     }
 
@@ -369,7 +393,7 @@ namespace Wpf15puzzle
               break;
 
             }
-            if (board[i, j] != 4 * i + (j + 1))
+            if (board[i, j] != n * i + (j + 1))
             {
               return false;
             }
@@ -379,26 +403,31 @@ namespace Wpf15puzzle
         return true;
       }
     }
-    private void CompleteGameAsync()
+    private void CompleteGame()
     {
       timer.Stop();
-      Xml2Record();
 
-      xmlRecord.AddRecord(elapsedTime);
-      Record2Xml();
       var (min, sec, ms, tic) = TimeConverter.ToString(elapsedTime);
       var message = "You completed this puzzle in " + $"{min}:{sec}:{tic}.";
-      if (elapsedTime == xmlRecord.Records[0])
+      if (record == null || record > elapsedTime)
       {
+        Properties.Settings.Default.record = elapsedTime;
+        Properties.Settings.Default.Save();
+
         message = "Congradulations, you made a new record!\n\n" + message;
       }
+
+      //ReadXml();
+      //xmlRecord.AddRecord(elapsedTime);
+      //SaveXml();
+
       var messageBox = new MessageBox
       {
         DataContext = message
       };
       DialogHost.Show(messageBox, "dialogMain", closingEventHandler);
 
-      this.Dispatcher.InvokeAsync(() => Initialize());
+      Initialize();
     }
 
     private void closingEventHandler(object sender, DialogClosingEventArgs eventArgs)
@@ -407,15 +436,11 @@ namespace Wpf15puzzle
     }
 
     #region Helper Methods
-    private double BoardRow2CanvasTop(int row) => lineHeight * (row + 1) + puzzleHeight * row;
+    private double BoardRow2CanvasTop(int row) => lineWidth * (row + 1) + puzzleWidth * row;
     private double BoardCol2CanvasLeft(int col) => lineWidth * (col + 1) + puzzleWidth * col;
     private (double? Top, double? Left) Board2Canvas((int row, int col) board) =>
       (BoardRow2CanvasTop(board.row), BoardCol2CanvasLeft(board.col));
     #endregion
 
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
   }
 }

@@ -101,7 +101,7 @@
                      TextWrapping="Wrap"
                      Width="250"
                      FontSize="20"
-                     Margin="10">
+                     Margin="20,10,10,10">
           <Run>Sort the numbers </Run>
           <LineBreak />
           <Run Text="             as fast as you can!" />
