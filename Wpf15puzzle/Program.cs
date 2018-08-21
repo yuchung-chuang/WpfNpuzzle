@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Wpf15puzzle
 {
+  /// <summary>
+  /// 將所有Dll檔合併到exe中，已捨棄
+  /// </summary>
   class Program
   {
     [STAThreadAttribute]
@@ -22,7 +25,7 @@ namespace Wpf15puzzle
     {
       Assembly executingAssembly = Assembly.GetExecutingAssembly();
       AssemblyName assemblyName = new AssemblyName(args.Name);
-
+      
       string path = assemblyName.Name + ".dll";
       if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
       {
