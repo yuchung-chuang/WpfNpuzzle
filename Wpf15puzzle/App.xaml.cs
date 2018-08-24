@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using MahApps.Metro;
@@ -16,6 +17,7 @@ namespace Wpf15puzzle
   {
     protected override void OnStartup(StartupEventArgs e)
     {
+      //複寫MahApps設定
       // add custom accent and theme resource dictionaries to the ThemeManager
       // you should replace MahAppsMetroThemesSample with your application name
       // and correct place where your custom accent lives
@@ -28,7 +30,7 @@ namespace Wpf15puzzle
       ThemeManager.ChangeAppStyle(Application.Current,
                                   ThemeManager.GetAccent("CustomAccent1"),
                                   theme.Item1);
-
+      
       base.OnStartup(e);
     }
   }

@@ -6,17 +6,18 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:local="clr-namespace:Wpf15puzzle"
                      mc:Ignorable="d"
-                     Title="15 PUZZLE"
                      Width="500"
                      Height="650"
                      WindowStartupLocation="CenterScreen"
                      Loaded="Window_Loaded"
-                     Icon="Resources/icon2.png"
                      TitleCaps="False"
                      Background="Black"
                      GlowBrush="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}"
-                     ShowIconOnTitleBar="False">
+                     Title="PUZZLE"
+                     Icon="Resources/icon4_2.png"
+                     ShowIconOnTitleBar="True">
   <Frame Name="frameMain"
          NavigationUIVisibility="Hidden"
+         FocusVisualStyle="{x:Null}"
          Loaded="frameMain_Loaded"/>
 </mahapps:MetroWindow>

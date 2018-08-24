@@ -54,7 +54,7 @@
     <StartupObject>Wpf15puzzle.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\icon2.ico</ApplicationIcon>
+    <ApplicationIcon>resources\icon4.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro, Version=1.2.4.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
@@ -96,10 +96,8 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="XmlRecord.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Splash.xaml.cs">
-      <DependentUpon>Splash.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SplashPage.xaml.cs">
       <DependentUpon>SplashPage.xaml</DependentUpon>
     </Compile>
@@ -124,10 +122,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MessageBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Splash.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -175,24 +169,30 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icon.PNG" />
+    <Resource Include="resources\icon.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icon.ico" />
+    <Resource Include="resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icon2.png" />
+    <Resource Include="resources\icon2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icon2.ico" />
+    <Resource Include="resources\icon2.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\splashText.mp4">
+    <None Include="resources\splashText.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Resource Include="Resources\icon3.png" />
-    <Content Include="Resources\RobotVoice.wav" />
-    <Content Include="Resources\startSound.wav" />
+    <Resource Include="resources\icon3.png" />
+    <None Include="resources\RobotVoice.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Resource Include="resources\icon4.ico" />
+    <Resource Include="resources\icon4.png" />
+    <Resource Include="resources\icon4_2.ico" />
+    <Resource Include="resources\icon4_2.png" />
+    <Content Include="resources\startSound.wav" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

@@ -1,0 +1,176 @@
+﻿<Page x:Class="Wpf15puzzle.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:Wpf15puzzle"
+      mc:Ignorable="d"
+      d:DesignHeight="650"
+      d:DesignWidth="500"
+      Title="MainPage"
+      Background="#FFCAE7FF"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:system="clr-namespace:System;assembly=mscorlib"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+      TextElement.FontWeight="Medium"
+      TextElement.FontSize="20"
+      FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+      FontSize="20"
+      Loaded="Page_Loaded"
+      FocusVisualStyle="{x:Null}">
+
+  <materialDesign:DialogHost FocusVisualStyle="{x:Null}"
+                             Identifier="dialogMain">
+    <Grid Name="gridMain"
+          Width="440"
+          Height="600">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+      <StackPanel Orientation="Vertical">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+          </Grid.ColumnDefinitions>
+          <StackPanel Orientation="Horizontal"
+                      Grid.Column="0">
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Center">
+              <Button Name="btnPlus"
+                      Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                      Width="30"
+                      Height="30"
+                      FocusVisualStyle="{x:Null}"
+                      Margin="2"
+                      Click="btnPlus_Click"
+                      Background="{DynamicResource PrimaryBrush800}">
+                <materialDesign:PackIcon Kind="Plus"
+                                         Width="20"
+                                         Height="20" />
+              </Button>
+              <Button Name="btnMinus"
+                      Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                      FocusVisualStyle="{x:Null}"
+                      Width="30"
+                      Height="30"
+                      Margin="2"
+                      Click="btnMinus_Click"
+                      Background="{DynamicResource PrimaryBrush800}">
+                <materialDesign:PackIcon Kind="Minus"
+                                         Width="20"
+                                         Height="20" />
+              </Button>
+
+            </StackPanel>
+            <TextBlock Name="tbHeaderN"
+                       Text="15"
+                       Margin="5,10"
+                       Width="42"
+                       FontSize="36"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center" />
+            <TextBlock Name="tbHeader"
+                       Text="Puzzle"
+                       Margin="5"
+                       FontSize="36"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left" />
+
+          </StackPanel>
+          <StackPanel Orientation="Horizontal"
+                      Grid.Column="2"
+                      Height="70">
+            <Border Background="{DynamicResource PrimaryBrush500}"
+                    CornerRadius="5"
+                    Width="100"
+                    Margin="10,10,0,10">
+              <StackPanel Orientation="Vertical"
+                          VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center"
+                           Foreground="{DynamicResource AccentBrush100}"
+                           FontSize="16">
+              BEST
+                </TextBlock>
+                <TextBlock Name="tbBest"
+                           HorizontalAlignment="Center"
+                           Foreground="{StaticResource PrimaryHueMidForegroundBrush}">
+              00:00:00
+                </TextBlock>
+
+              </StackPanel>
+            </Border>
+            <Border Background="{DynamicResource PrimaryBrush500}"
+                    CornerRadius="5"
+                    Margin="10"
+                    Width="100">
+              <StackPanel Orientation="Vertical"
+                          VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center"
+                           Foreground="{DynamicResource AccentBrush100}"
+                           FontSize="16">
+              TIMER
+                </TextBlock>
+                <TextBlock Name="tbTimer"
+                           HorizontalAlignment="Center"
+                           Foreground="{StaticResource PrimaryHueMidForegroundBrush}">
+              00:00:00
+                </TextBlock>
+
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Grid>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+          </Grid.ColumnDefinitions>
+          <TextBlock Name="tbDescription"
+                     TextWrapping="Wrap"
+                     Width="250"
+                     FontSize="20"
+                     Margin="20,10,10,10">
+          <Run>Sort the numbers </Run>
+          <LineBreak />
+          <Run Text="             as fast as you can!" />
+          </TextBlock>
+          <Button Name="btnNewGame"
+                  Grid.Column="2"
+                  Margin="10"
+                  Height="40"
+                  FontSize="20"
+                  FocusVisualStyle="{x:Null}"
+                  Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                  Click="btnNewGame_Click"
+                  Background="{DynamicResource PrimaryBrush800}">
+            New Game
+          </Button>
+        </Grid>
+      </StackPanel>
+      <Border Name="backgroundBorder"
+              Grid.Row="1"
+              Background="{StaticResource AccentBrush400}"
+              CornerRadius="10"
+              Margin="10"
+              Width="420"
+              Height="420"
+              ToolTip="Use arrow keys to move the puzzles!"
+              IsHitTestVisible="True">
+        <Canvas Name="canvasBoard">
+          <Canvas.Resources>
+            <Style TargetType="Button"
+                   BasedOn="{StaticResource puzzle}">
+            </Style>
+
+          </Canvas.Resources>
+        </Canvas>
+      </Border>
+    </Grid>
+  </materialDesign:DialogHost>
+</Page>
