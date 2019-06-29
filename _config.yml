@@ -1,1 +1,5 @@
 theme: jekyll-theme-slate
+
+title: ["N-puzzle"]
+show_downloads: ["true"]
+description: ["N puzzle game made by C.Y.C"]
