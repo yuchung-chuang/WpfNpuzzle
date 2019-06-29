@@ -16,4 +16,4 @@ https://www.youtube.com/watch?v=jrPuWZo6Dkk&t=5s
 1. Unzip it.
 1. Run N-puzzle.exe
 
-Have fun!
+## Have fun!
