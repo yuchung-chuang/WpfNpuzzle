@@ -6,9 +6,7 @@ A 15-puzzle game made with WPF.
 
 ![Preview image](https://yuchungchuang.files.wordpress.com/2018/08/118.png?w=230&h=299&zoom=1)
 
-## Demo Video: 
-
-https://www.youtube.com/watch?v=jrPuWZo6Dkk&t=5s
+## [Demo Video](https://www.youtube.com/watch?v=jrPuWZo6Dkk&t=5s)
 
 ## Usage:
 
