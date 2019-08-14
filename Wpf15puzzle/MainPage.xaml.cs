@@ -4,10 +4,9 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MyLibrary.Extensions;
-using static MyLibrary.Methods.Math;
 using static System.Math;
-using MyLibrary.Methods;
+using static CycWpfLibrary.NativeMethod;
+using static CycWpfLibrary.Math;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.Generic;
@@ -17,6 +16,7 @@ using System.Diagnostics;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
 using System.Media;
+using CycWpfLibrary;
 
 namespace Wpf15puzzle
 {
@@ -33,16 +33,16 @@ namespace Wpf15puzzle
     {
       //窗體按鍵觸發頁面按鍵
       var window = Window.GetWindow(this);
-      window.KeyDown += Page_KeyDown;
+      if (window != null)
+        window.KeyDown += Page_KeyDown;
+      else
+        throw new Exception("Cannot find window!");
 
       Initialize();
     }
     private void btnNewGame_Click(object sender, RoutedEventArgs e)
     {
-      if (timer.Enabled)
-      {
-        timer.Stop();
-      }
+      if (timer.Enabled) timer.Stop();
       Initialize();
     }
     private void Initialize()
@@ -61,16 +61,13 @@ namespace Wpf15puzzle
     int? record
     {
       get => xmlRecord.dictionary[boardLength];
-      set
-      {
-        xmlRecord.dictionary[boardLength] = value;
-      }
+      set => xmlRecord.dictionary[boardLength] = value;
     }
     string recordPath = "record.xml";
     private void InitializeXmlRecord()
     {
       ReadXml();
-      var (min, sec, ms, tic) = TimeConverter.ToString(record);
+      var (min, sec, ms, tic) = TimeFormat.ToString(record);
       tbBest.Text = $"{min}:{sec}:{tic}";
     }
     private void InitializeXml()
@@ -80,10 +77,7 @@ namespace Wpf15puzzle
     }
     private void CheckXml()
     {
-      if (!File.Exists(recordPath))
-      {
-        InitializeXml();
-      }
+      if (!File.Exists(recordPath)) InitializeXml();
     }
     private void SaveXml()
     {
@@ -96,10 +90,7 @@ namespace Wpf15puzzle
       var xmlString = File.ReadAllText(recordPath);
       xmlRecord = XmlGenericSerializer.Deserialize<XmlRecord>(xmlString);
 
-      if (xmlRecord == null)
-      {
-        InitializeXml();
-      }
+      if (xmlRecord == null) InitializeXml();
     }
 
     int _boardLength = 4;
@@ -109,8 +100,8 @@ namespace Wpf15puzzle
       set
       {
         _boardLength = value;
-        btnMinus.IsEnabled = _boardLength == 3 ? false : true;
-        btnPlus.IsEnabled = _boardLength == 6 ? false : true;
+        btnMinus.IsEnabled = _boardLength != 3;
+        btnPlus.IsEnabled = _boardLength != 6;
       }
     }
     private void InitializeHeader()
@@ -133,7 +124,7 @@ namespace Wpf15puzzle
     private void InitializeCanvas()
     {
       var p = boardLength + 1; // p > n
-      var l = ((boardLength + 1) * p / (p - boardLength));
+      var l = (boardLength + 1) * p / (p - boardLength);
       lineWidth = canvasBoard.ActualWidth / l;
       puzzleWidth = canvasBoard.ActualWidth / p;
     }
@@ -147,33 +138,21 @@ namespace Wpf15puzzle
       var numbers = Enumerable.Range(1, L).ToArray();
       do
       {
-#if DEBUG
-        break;
-#endif
         numbers = numbers.OrderBy(x => random.Next()).ToArray();
       } while (!IsValid(numbers));
       for (int i = 0, k = 0; i < boardLength && k < L; i++)
-      {
-        for (int j = 0; j < boardLength && k < L; j++, k++)
-        {
-          board[i, j] = numbers[k];
-        }
-      }
+      for (var j = 0; j < boardLength && k < L; j++, k++)
+        board[i, j] = numbers[k];
     }
     private bool IsValid(int[] numbers)
     {
-      int invariant = 0;
-      for (int i = 0; i < numbers.Length; i++)
-      {
-        for (int j = i + 1; j < numbers.Length; j++)
-        {
-          if (numbers[i] > numbers[j])
-          {
-            invariant++;
-          }
-        }
-      }
-      return invariant % 2 == 0 ? true : false;
+      var invariant = 0;
+      for (var i = 0; i < numbers.Length; i++)
+      for (var j = i + 1; j < numbers.Length; j++)
+        if (numbers[i] > numbers[j])
+          invariant++;
+
+      return invariant % 2 == 0;
     }
 
     List<Button> puzzles = new List<Button>();
@@ -181,26 +160,21 @@ namespace Wpf15puzzle
     {
       canvasBoard.Children.Clear();
       puzzles.Clear();
-      for (int row = 0; row < boardLength; row++)
+      for (var row = 0; row < boardLength; row++)
+      for (var col = 0; col < boardLength; col++)
       {
-        for (int col = 0; col < boardLength; col++)
+        if (board[row, col] == 0) continue;
+        var puzzle = new Button
         {
-          if (board[row, col] == 0)
-          {
-            continue;
-          }
-          var puzzle = new Button
-          {
-            Content = board[row, col].ToString(),
-            Width = puzzleWidth,
-            Height = puzzleWidth,
-          };
-          puzzle.Click += Puzzle_Click;
-          canvasBoard.Children.Add(puzzle);
-          puzzles.Add(puzzle);
-          Canvas.SetTop(puzzle, BoardRow2CanvasTop(row));
-          Canvas.SetLeft(puzzle, BoardCol2CanvasLeft(col));
-        }
+          Content = board[row, col].ToString(),
+          Width = puzzleWidth,
+          Height = puzzleWidth,
+        };
+        puzzle.Click += Puzzle_Click;
+        canvasBoard.Children.Add(puzzle);
+        puzzles.Add(puzzle);
+        Canvas.SetTop(puzzle, BoardRow2CanvasTop(row));
+        Canvas.SetLeft(puzzle, BoardCol2CanvasLeft(col));
       }
     }
 
@@ -217,7 +191,7 @@ namespace Wpf15puzzle
       {
         puzzle.RenderTransform = new ScaleTransform(0, 0);
         puzzle.RenderTransformOrigin = new Point(0.5, 0.5);
-        var storyboard = new Storyboard();
+        var sb = new Storyboard();
 
         var animationX = animation.Clone();
         var animationY = animation.Clone();
@@ -225,9 +199,9 @@ namespace Wpf15puzzle
         Storyboard.SetTarget(animationY, puzzle);
         Storyboard.SetTargetProperty(animationX, new PropertyPath("RenderTransform.ScaleX"));
         Storyboard.SetTargetProperty(animationY, new PropertyPath("RenderTransform.ScaleY"));
-        storyboard.Children.Add(animationX);
-        storyboard.Children.Add(animationY);
-        storyboard.Begin(this);
+        sb.Children.Add(animationX);
+        sb.Children.Add(animationY);
+        sb.Begin(this);
       }
     }
 
@@ -237,14 +211,13 @@ namespace Wpf15puzzle
     private void InitializeTimer()
     {
       elapsedTime = 0;
-      if (timer != null)
-      {
-        timer.Stop();
-      }
+      timer?.Stop();
 
       //非同步計時，較精確(仍有延遲問題)
-      timer = new Timer();
-      timer.Interval = 1d / fps * 1e3;
+      timer = new Timer
+      {
+        Interval = 1d / fps * 1e3
+      };
       timer.Elapsed += timer_Elapsed;
       timer.AutoReset = true; //重複執行
       UpdateTimerText(0);
@@ -256,8 +229,8 @@ namespace Wpf15puzzle
     }
     private void UpdateTimerText(int time)
     {
-      var (min, sec, ms, tic) = TimeConverter.ToString(time);
-      this.Dispatcher.InvokeAsync(() => { tbTimer.Text = $"{min}:{sec}:{tic}"; });
+      var (min, sec, ms, tic) = TimeFormat.ToString(time);
+      Dispatcher?.InvokeAsync(() => { tbTimer.Text = $"{min}:{sec}:{tic}"; });
     }
 
     List<Key> keyList = new List<Key> { Key.Left, Key.Right, Key.Up, Key.Down };
@@ -265,7 +238,7 @@ namespace Wpf15puzzle
     private (bool, (int row, int col), (int row, int col)) CheckKey(Key key)
     {
       (int row, int col) to = board.IndexOf(0);
-      (int row, int col) from = to;
+      var from = to;
       switch (key)
       {
         case Key.Left:
@@ -284,9 +257,8 @@ namespace Wpf15puzzle
           //無效的按鍵
           return (false, from, to);
       }
-      var IsMove = (!IsIn(from.row, boardLength - 1, 0) ||
-        !IsIn(from.col, boardLength - 1, 0)) ? false : true;
-      return (IsMove, from, to);
+      var isMove = IsIn(from.row, boardLength - 1, 0) && IsIn(from.col, boardLength - 1, 0);
+      return (isMove, from, to);
     }
     private void Page_KeyDown(object sender, KeyEventArgs e)
     {
@@ -295,26 +267,18 @@ namespace Wpf15puzzle
         return;
 
       MoveBoard(from, to);
-      if (IsComplete)
-      {
-        CompleteGame();
-      }
+      if (IsComplete) CompleteGame();
     }
 
     private (bool, (int row, int col), (int row, int col)) CheckClick(Button puzzle)
     {
       (int row, int col) to = board.IndexOf(0);
-      (int row, int col) from = board.IndexOf(int.Parse(puzzle.Content as string));
+      (int row, int col) from = board.IndexOf(int.Parse(puzzle.Content.ToString()));
       if ((to.row == from.row || to.col == from.col) &&
         Abs(to.row - from.row) <= 1 &&
         Abs(to.col - from.col) <= 1)
-      {
         return (true, from, to);
-      }
-      else
-      {
-        return (false, (0, 0), (0, 0));
-      }
+      return (false, (0, 0), (0, 0));
     }
     private void Puzzle_Click(object sender, RoutedEventArgs e)
     {
@@ -323,18 +287,12 @@ namespace Wpf15puzzle
         return;
 
       MoveBoard(from, to);
-      if (IsComplete)
-      {
-        CompleteGame();
-      }
+      if (IsComplete) CompleteGame();
     }
     private void MoveBoard((int row, int col) from, (int row, int col) to)
     {
       //第一次移動，開始計時
-      if (!timer.Enabled)
-      {
-        timer.Start();
-      }
+      if (!timer.Enabled) timer.Start();
       //中斷前次移動的動畫
       if (storyboard != null && IsAnimating)
       {
@@ -343,7 +301,7 @@ namespace Wpf15puzzle
       }
       //開始移動
       IsAnimating = true;
-      movingPuzzle = puzzles.Find(p => int.Parse(p.Content as string) == board[from.row, from.col]);
+      movingPuzzle = puzzles.Find(p => int.Parse(p.Content.ToString()) == board[from.row, from.col]);
       MovePuzzle(Board2Canvas(from), Board2Canvas(to));
       Swap(ref board[from.row, from.col], ref board[to.row, to.col]);
     }
@@ -353,13 +311,13 @@ namespace Wpf15puzzle
     {
       PropertyPath path;
       double? from, to;
-      if (fromCanvas.Left == toCanvas.Left)
+      if (Equals(fromCanvas.Left, toCanvas.Left))
       {
         path = new PropertyPath(Canvas.TopProperty);
         from = fromCanvas.Top;
         to = toCanvas.Top;
       }
-      else if (fromCanvas.Top == toCanvas.Top)
+      else if (Equals(fromCanvas.Top, toCanvas.Top))
       {
         path = new PropertyPath(Canvas.LeftProperty);
         from = fromCanvas.Left;
@@ -384,7 +342,7 @@ namespace Wpf15puzzle
       storyboard.Children.Add(animation);
       storyboard.Begin();
     }
-    bool IsAnimating = false;
+    bool IsAnimating;
     private void storyboard_Completed(object sender, EventArgs e)
     {
       IsAnimating = false;
@@ -394,23 +352,15 @@ namespace Wpf15puzzle
     {
       get
       {
-        for (int i = 0; i < boardLength; i++)
+        for (var i = 0; i < boardLength; i++)
+        for (var j = 0; j < boardLength; j++)
         {
-          for (int j = 0; j < boardLength; j++)
-          {
-            if (i == boardLength - 1 && j == boardLength - 1)
-            {
-              //最後一格必為0
-              break;
-
-            }
-            if (board[i, j] != boardLength * i + (j + 1))
-            {
-              return false;
-            }
-
-          }
+          if (i == boardLength - 1 && j == boardLength - 1)
+          //最後一格必為0
+            break;
+          if (board[i, j] != boardLength * i + j + 1) return false;
         }
+
         return true;
       }
     }
@@ -418,7 +368,7 @@ namespace Wpf15puzzle
     {
       timer.Stop();
 
-      var (min, sec, ms, tic) = TimeConverter.ToString(elapsedTime);
+      var (min, sec, ms, tic) = TimeFormat.ToString(elapsedTime);
       var message = "You completed this puzzle in " + $"{min}:{sec}:{tic}.";
 
       ReadXml();
@@ -447,8 +397,8 @@ namespace Wpf15puzzle
 
     private double BoardRow2CanvasTop(int row) => lineWidth * (row + 1) + puzzleWidth * row;
     private double BoardCol2CanvasLeft(int col) => lineWidth * (col + 1) + puzzleWidth * col;
-    private (double? Top, double? Left) Board2Canvas((int row, int col) board) =>
-      (BoardRow2CanvasTop(board.row), BoardCol2CanvasLeft(board.col));
+    private (double? Top, double? Left) Board2Canvas((int row, int col) b) =>
+      (BoardRow2CanvasTop(b.row), BoardCol2CanvasLeft(b.col));
     #endregion
 
   }

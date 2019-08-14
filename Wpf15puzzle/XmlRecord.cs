@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyLibrary.Classes;
+using CycWpfLibrary.Xml;
 
 namespace Wpf15puzzle
 {

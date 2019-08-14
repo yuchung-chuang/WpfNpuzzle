@@ -46,7 +46,7 @@
   <Grid>
     <Grid>
       <Image x:Name="Icon"
-             Source="Resources/icon3.png"
+             Source="Resources/icon_cyc_black.png"
              Width="150"
              Height="150"
              Margin="28.499,0,36,38.667" />

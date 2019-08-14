@@ -14,7 +14,7 @@
                      Background="Black"
                      GlowBrush="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}"
                      Title="PUZZLE"
-                     Icon="Resources/icon4_2.png"
+                     Icon="Resources/icon.png"
                      ShowIconOnTitleBar="True">
   <Frame Name="frameMain"
          NavigationUIVisibility="Hidden"

@@ -24,7 +24,7 @@ namespace Wpf15puzzle
       ThemeManager.AddAccent("CustomAccent1", new Uri("pack://application:,,,/Wpf15puzzle;component/MahAppsOverrides.xaml"));
 
       // get the current app style (theme and accent) from the application
-      Tuple<AppTheme, Accent> theme = ThemeManager.DetectAppStyle(Application.Current);
+      var theme = ThemeManager.DetectAppStyle(Application.Current);
 
       // now change app style to the custom accent and current theme
       ThemeManager.ChangeAppStyle(Application.Current,
