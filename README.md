@@ -10,7 +10,7 @@ A 15-puzzle game made with WPF.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/github/alex1392/WpfNpuzzle?branch=master&svg=true)](https://ci.appveyor.com/project/alex1392/WpfNpuzzle)
 
-![license](https://img.shields.io/github/license/alex1392/WpfNpuzzle.svg?style=flat)
+![license](https://img.shields.io/github/license/alex1392/WpfNpuzzle)
 
 
 ## Preview:
