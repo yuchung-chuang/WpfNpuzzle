@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using MahApps.Metro;
 
-namespace Wpf15puzzle
+namespace WpfNpuzzle
 {
   /// <summary>
   /// App.xaml 的互動邏輯
@@ -21,7 +21,7 @@ namespace Wpf15puzzle
       // add custom accent and theme resource dictionaries to the ThemeManager
       // you should replace MahAppsMetroThemesSample with your application name
       // and correct place where your custom accent lives
-      ThemeManager.AddAccent("CustomAccent1", new Uri("pack://application:,,,/Wpf15puzzle;component/MahAppsOverrides.xaml"));
+      ThemeManager.AddAccent("CustomAccent1", new Uri("pack://application:,,,/WpfNpuzzle;component/MahAppsOverrides.xaml"));
 
       // get the current app style (theme and accent) from the application
       var theme = ThemeManager.DetectAppStyle(Application.Current);
