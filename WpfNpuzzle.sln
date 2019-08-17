@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfNpuzzle", "Wpf15puzzle\WpfNpuzzle.csproj", "{6C8B3C38-C66E-44D3-84FD-F2F1C6DBFF19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfNpuzzle", "WpfNpuzzle\WpfNpuzzle.csproj", "{6C8B3C38-C66E-44D3-84FD-F2F1C6DBFF19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CycWpfLibrary", "CycWpfLibrary\CycWpfLibrary\CycWpfLibrary.csproj", "{DC9B1571-60B9-48D4-A147-24820D8E895B}"
 EndProject
