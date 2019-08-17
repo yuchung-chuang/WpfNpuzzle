@@ -24,10 +24,10 @@ configuration: Release
 
 # Build settings, not to be confused with "before_build" and "after_build".
 build:
-  project: SubModule.sln      # path to Visual Studio solution or project
+  project: WpfNpuzzle.sln      # path to Visual Studio solution or project
 
 
 # scripts to run before build
 before_build:
   - nuget restore
-  - nuget restore Wpf15puzzle\Wpf15puzzle.sln
+  - nuget restore WpfNpuzzle\WpfNpuzzle.sln
