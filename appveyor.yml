@@ -1,0 +1,33 @@
+# Start builds on tags only (GitHub and BitBucket)
+skip_non_tags: true
+
+# Build worker image (VM template)
+image: Visual Studio 2017
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  
+# scripts that run after cloning repository
+install:
+  - cmd: git submodule update --init
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: Any CPU
+
+# to add several platforms to build matrix:
+#platform:
+#  - x86
+#  - Any CPU
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+# Build settings, not to be confused with "before_build" and "after_build".
+build:
+  project: SubModule.sln      # path to Visual Studio solution or project
+
+
+# scripts to run before build
+before_build:
+  - nuget restore
+  - nuget restore Wpf15puzzle\Wpf15puzzle.sln
