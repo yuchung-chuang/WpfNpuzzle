@@ -3,7 +3,7 @@ using System.Threading;
 using System.Windows;
 using MahApps.Metro.Controls;
 
-namespace WpfNpuzzle
+namespace Wpf15puzzle
 {
   //public class XmlRecord
   //{

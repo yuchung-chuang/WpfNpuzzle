@@ -18,7 +18,7 @@ using MaterialDesignThemes.Wpf;
 using System.Media;
 using CycWpfLibrary;
 
-namespace WpfNpuzzle
+namespace Wpf15puzzle
 {
   /// <summary>
   /// MainPage.xaml 的互動邏輯
