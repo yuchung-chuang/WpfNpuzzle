@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CycWpfLibrary.Xml;
 
-namespace Wpf15puzzle
+namespace WpfNpuzzle
 {
   public class XmlRecord
   {

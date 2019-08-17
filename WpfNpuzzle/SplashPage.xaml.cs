@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Wpf15puzzle
+namespace WpfNpuzzle
 {
   /// <summary>
   /// SplashPage.xaml 的互動邏輯

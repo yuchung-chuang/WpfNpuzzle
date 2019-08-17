@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wpf15puzzle
+namespace WpfNpuzzle
 {
   /// <summary>
   /// 將所有Dll檔合併到exe中，已捨棄
