@@ -30,4 +30,4 @@ build:
 # scripts to run before build
 before_build:
   - nuget restore
-  - nuget restore WpfNpuzzle\WpfNpuzzle.sln
+  - nuget restore CycWpfLibrary\CycWpfLibrary.sln
